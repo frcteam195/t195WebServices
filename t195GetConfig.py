@@ -24,6 +24,7 @@ def lambda_handler(event, context):
         if None == payload:
             respond('"computerName" not specified in query string')
         conn = t195db.connect()
+        print("Database host is {}".format(conn.server_host))
         cursor = conn.cursor()
         cursor.execute("SELECT a.AllianceStation AllianceStation, c.ComputerTypeID ComputerTypeID from AllianceStations a, Computers c " +
                        "WHERE a.AllianceStationID = c.AllianceStationID " +
