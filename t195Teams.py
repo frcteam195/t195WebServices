@@ -23,8 +23,9 @@ def lambda_handler(event, context):
         conn = t195db.connect()
         print("Database host is {}".format(conn.server_host))
         cursor = conn.cursor()
-        cursor.execute("SELECT a.* FROM Teams a, MatchScouting b, Events c " +
-                       "WHERE a.Team = b.Team and b.EventID = c.EventID and c.CurrentEvent = 1")
+        cursor.execute("SELECT distinct a.* FROM Teams a, MatchScouting b, Events c " +
+                       "WHERE a.Team = b.Team and b.EventID = c.EventID and c.CurrentEvent = 1 " +
+                       "ORDER BY a.Team")
         columns = [column[0] for column in cursor.description]
         results = []
         for row in cursor.fetchall():
