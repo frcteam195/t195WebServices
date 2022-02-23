@@ -18,3 +18,28 @@ def connect():
                            database=item['database'])
 
     return conn
+
+
+def put(cmd):
+    logging.debug(str(datetime.datetime.now()) + " Executing update command: cmd={0}".format(cmd))
+    ret = "failure"
+    try:
+        conn = connect()
+        cursor = conn.cursor()
+        cursor.execute(cmd)
+        conn.commit()
+        logging.debug(str(datetime.datetime.now()) + " {0} records were updated: cmd={1}".format(cursor.rowcount, cmd))
+        ret = "success"
+    except MySQLError as merr:
+        logging.error(str(datetime.datetime.now()) + " Unexpected error occurred {0}".format(merr))
+        pass
+    except ValueError as verr:
+        logging.error(str(datetime.datetime.now()) + " Unexpected error occurred {0}".format(verr))
+        pass
+    except:
+        logging.error(str(datetime.datetime.now()) + " Unexpected error occurred {0}".format(sys.exc_info()[0]))
+        pass
+    finally:
+        if conn:
+            conn.close()
+    return(ret)
